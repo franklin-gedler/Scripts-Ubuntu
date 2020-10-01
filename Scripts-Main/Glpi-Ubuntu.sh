@@ -1,11 +1,17 @@
 #!/bin/bash
+#GlpiUbuntu
 
 ping -c1 glpi.despegar.it &>/dev/null
 if [[ $? -ne 0 ]] || [[ "$EUID" != 0 ]]; then
 	echo "Este Script requiere sudo o no estas conectado a la RED de Despegar"
 	exit 1
 else
-
+	DirHost=$(pwd)
+	TEMPDIR=`mktemp -d`
+	cd $TEMPDIR
+	pwd
+	echo "$DirHost" > DirHost
+    ##########################################################################################################
 	#----------------------------------------------------------------------------------
 	# Esta dependencia libwrite-net-perl no es encontrada en los repos de ubuntu 18,
 	# esa dependencia, segun el portal de instalacion, sirve para enviar un encendido al equipo por LAN (WakeOnLan)
@@ -26,9 +32,6 @@ else
 		exit
 	else
 		
-		TEMPDIR=`mktemp -d`
-		cd $TEMPDIR
-
 		# Download .deb
 		wget https://github.com/fusioninventory/fusioninventory-agent/releases/download/2.5.2/fusioninventory-agent_2.5.2-1_all.deb
 		wget https://github.com/fusioninventory/fusioninventory-agent/releases/download/2.5.2/fusioninventory-agent-task-collect_2.5.2-1_all.deb
@@ -70,4 +73,13 @@ else
 		echo "           fusioninventory-agent instalado"
 		echo "-------------------------------------------------------"
 	fi
+	##########################################################################################################
+    cat > $TEMPDIR/aux.sh << 'EOF'
+	DirHost=$(cat DirHost)
+	PathFile=$(egrep -r 'GlpiUbuntuNAS' $DirHost | awk -F: 'FNR == 1 {print $1}')
+	rm -rf $PathFile
+EOF
+	chmod +x aux.sh
+	./aux.sh
+	exit
 fi

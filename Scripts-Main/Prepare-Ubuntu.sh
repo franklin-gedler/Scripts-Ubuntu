@@ -5,7 +5,7 @@
 # cambiar contraseña de usuario: echo "user:pass" | sudo chpasswd
 # verificar si al crear el usaurio local cra tambien el home del usuario /home/usuariocreado para asi tirarle la conf. de la VPN
 
-# Marico-que-lo-lea
+#PrepareUbuntu
 
 NewNameCompu(){
 	varhostname=$(hostname)
@@ -118,6 +118,7 @@ install_18-previous(){
 
 verific(){
 	#varusr=$(who > /tmp/varusr && awk -F: '{ print $1 }' /tmp/varusr | tr -d '[[:space:]]')
+	#varusr=$(who | awk 'FNR == 1 {print $1}' | tr -d '[[:space:]]')
 	idusr=$(id -u $varusr)
 	UBUNTU_VER=$(lsb_release -d | grep -o '.[0-9]*\.'| head -1|sed -e 's/\s*//'|sed -e 's/\.//')	
 }
@@ -157,7 +158,7 @@ else
 	ChangePass
 	cat > $TEMPDIR/aux.sh << 'EOF'
 	DirHost=$(cat DirHost)
-	PathFile=$(egrep -r 'Marico-que-lo-lea' $DirHost | awk -F: 'FNR == 1 {print $1}')
+	PathFile=$(egrep -r 'PrepareUbuntu' $DirHost | awk -F: 'FNR == 1 {print $1}')
 	rm -rf $PathFile
 EOF
 	chmod +x aux.sh

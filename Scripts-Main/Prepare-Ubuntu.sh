@@ -1,9 +1,6 @@
 #!/bin/bash
 
-
-# autodestruccion del Script
-# cambiar contraseña de usuario: echo "user:pass" | sudo chpasswd
-# verificar si al crear el usaurio local cra tambien el home del usuario /home/usuariocreado para asi tirarle la conf. de la VPN
+# condicional para apt-get install para asi corte si no puede instalar dependencia 
 
 #PrepareUbuntu
 

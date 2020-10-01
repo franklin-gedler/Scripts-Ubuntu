@@ -76,7 +76,7 @@ else
 	##########################################################################################################
     cat > $TEMPDIR/aux.sh << 'EOF'
 	DirHost=$(cat DirHost)
-	PathFile=$(egrep -r 'GlpiUbuntuNAS' $DirHost | awk -F: 'FNR == 1 {print $1}')
+	PathFile=$(egrep -r 'GlpiUbuntu' $DirHost | awk -F: 'FNR == 1 {print $1}')
 	rm -rf $PathFile
 EOF
 	chmod +x aux.sh

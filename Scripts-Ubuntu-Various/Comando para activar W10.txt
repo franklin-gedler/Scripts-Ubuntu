@@ -1,0 +1,27 @@
+-Ingresar a la consola con permiso de administrador
+
+-Colocar el siguiente comando: 
+
+wmic path softwarelicensingservice get OA3xOriginalProductKey
+
+
+
+nota:
+
+Para estos comando desdes habilitar al usr: administrador y abrir el CMD 
+
+slmgr -dli (muestra la informacion de la licencia actual de windows con el estado de activacion y los ultimos 5 caracteres de la clave parcial)
+
+slmgr -dlv ( similar al comando anterior pero brindando un poco mas de informacion)
+
+slmgr -ipk W269N-WFGWX-YVC9B-4J6C9-T83GX ( utilizado para reemplazar o meter un nuevo serial donde son reemplazadas por el serial a ingresar )
+
+slmgr -xpr ( muestra la expiracion de la licencia actual del sistema o si esta activado permanentemente )
+
+slmgr -upk ( desinstala el serial actualmente instalado en el sistema y vuelve al estado de TRIAL)
+
+slmgr -ato ( activa windows y el serial con los servidores de microsoft)
+
+slmgr -skms "tu nombre"( activa tu nombre)
+
+slmgr -rearm ( resetea el estado de la licencia y activacion en el sistema)

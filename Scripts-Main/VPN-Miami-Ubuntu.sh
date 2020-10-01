@@ -1,4 +1,5 @@
 #!/bin/bash
+#VPNMiamiUbuntuNoBorrar
 
 created_by(){
 
@@ -32,7 +33,8 @@ install_18-previous(){
 }
 
 verific(){
-	varusr=$(who > /tmp/varusr && awk -F: '{ print $1 }' /tmp/varusr | tr -d '[[:space:]]')
+	#varusr=$(who > /tmp/varusr && awk -F: '{ print $1 }' /tmp/varusr | tr -d '[[:space:]]')
+	varusr=$(who | awk 'FNR == 1 {print $1}' | tr -d '[[:space:]]')
 	idusr=$(id -u $varusr)
 	UBUNTU_VER=$(lsb_release -d | grep -o '.[0-9]*\.'| head -1|sed -e 's/\s*//'|sed -e 's/\.//')	
 }
@@ -51,14 +53,26 @@ if [[ $? -ne 0 ]] || [[ "$EUID" != 0 ]]; then
 	echo "Este Script requiere root o no tienes conexion a internet"
 	exit 1
 else
+	DirHost=$(pwd)
+	TEMPDIR=`mktemp -d`
+	cd $TEMPDIR
+	echo "$DirHost" > DirHost
+	##############################################################################################
 	verific
 	if [[ $UBUNTU_VER > 18 ]]; then
-		TEMPDIR=$(mktemp -d)
-		cd $TEMPDIR
 		install_19-20
 		created_by
 	else
 		install_18-previous
 		created_by
 	fi
+	#############################################################################################
+	cat > $TEMPDIR/aux.sh << 'EOF'
+	DirHost=$(cat DirHost)
+	PathFile=$(egrep -r 'VPNMiamiUbuntuNoBorrar' $DirHost | awk -F: 'FNR == 1 {print $1}')
+	rm -rf $PathFile
+EOF
+	chmod +x aux.sh
+	./aux.sh
+	exit
 fi

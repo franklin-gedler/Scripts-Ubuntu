@@ -141,6 +141,7 @@ else
 	TEMPDIR=`mktemp -d`
 	cd $TEMPDIR
 	echo "$DirHost" > DirHost
+	############################################################################################
 	NewNameCompu
 	timedatectl set-timezone "America/Argentina/Buenos_Aires"
 	hwclock --systohc
@@ -156,6 +157,7 @@ else
 	fi
 	Glpi
 	ChangePass
+	#############################################################################################
 	cat > $TEMPDIR/aux.sh << 'EOF'
 	DirHost=$(cat DirHost)
 	PathFile=$(egrep -r 'PrepareUbuntu' $DirHost | awk -F: 'FNR == 1 {print $1}')

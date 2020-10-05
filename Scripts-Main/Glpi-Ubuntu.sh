@@ -3,7 +3,9 @@
 
 ping -c1 glpi.despegar.it &>/dev/null
 if [[ $? -ne 0 ]] || [[ "$EUID" != 0 ]]; then
-	echo "Este Script requiere sudo o no estas conectado a la RED de Despegar"
+	echo " ###################################################################"
+	echo " Este Script requiere sudo o no estas conectado a la RED de Despegar"
+	echo " ###################################################################"
 	exit 1
 else
 	DirHost=$(pwd)

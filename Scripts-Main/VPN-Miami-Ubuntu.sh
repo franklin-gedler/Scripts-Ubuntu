@@ -50,7 +50,9 @@ install_pulse(){
 
 ping -c1 google.com &>/dev/null
 if [[ $? -ne 0 ]] || [[ "$EUID" != 0 ]]; then
-	echo "Este Script requiere root o no tienes conexion a internet"
+	echo " #########################################################"
+	echo " Este Script requiere sudo o no tienes conexion a internet"
+	echo " #########################################################"
 	exit 1
 else
 	DirHost=$(pwd)

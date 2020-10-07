@@ -198,6 +198,10 @@ else
 		install_snx
 		Glpi
 		ChangePass
+		echo ""
+		echo "         =============================================== "
+		echo "           Script Completado, verificar si hay errores "
+		echo "         =============================================== "
 	fi
 	#############################################################################################
 	cat > $TEMPDIR/aux.sh << 'EOF'

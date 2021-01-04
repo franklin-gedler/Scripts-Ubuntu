@@ -24,13 +24,45 @@ NewNameCompu(){
 
 CreateNewUser(){
 	fundialog=${fundialog=dialog}
-	varusr=`$fundialog --stdout --no-cancel --title "    User Creation" --inputbox "Ingresar Username: \n Example: Nombre.Apellido " 0 0`
+	varusr=`$fundialog --stdout --no-cancel \
+	--backtitle " Asignar el equipo a un usuario " \
+	--title "    User Creation" \
+	--inputbox "Ingresar Username: \n Example: Nombre.Apellido " 0 0`
+	clear
 	adduser --force-badname $varusr
 	adduser $varusr sudo
 	#varusr=$(who > /tmp/varusr && awk -F: '{ print $1 }' /tmp/varusr | tr -d '[[:space:]]')
 	#varusr=$(who | awk 'FNR == 1 {print $1}' | tr -d '[[:space:]]')
 	idusr=$(id -u $varusr)
 	echo "Usuario creado y agregado al grupo sudo: $varusr" >> /home/$varadm/$escri/CheckInstall.txt
+}
+
+wantcreateuser(){
+   dialog --backtitle " Select yes or no " \
+   --title " Question, Please Answer " \
+   --yesno " Do you want to create a user? " 0 0
+
+   # Get exit status
+   # 0 means user hit [yes] button.
+   # 1 means user hit [no] button.
+   # 255 means user hit [Esc] key.
+
+   response=$?
+   case $response in
+      0) 
+      clear
+      CreateNewUser
+      ;;
+      1) 
+      clear
+      echo " No creamos el usuario, Seguimos . . . "
+      ;;
+      255) 
+      clear
+      echo " [ESC] key pressed. "
+      ;;
+   esac
+
 }
 
 InstallChrome(){
@@ -59,6 +91,7 @@ Glpi(){
 	echo ""
 	echo "-----------------------------------------------------------------------------------------------"
 	echo "|* Problemas para conectar al Server Glpi, verificar si estas conectado a la RED de Despegar *|"
+	echo "      Si estas desde casa abre otra terminal SIN CERRAR ESTA y conectate a la VPN Regional     "
 	echo "-----------------------------------------------------------------------------------------------"
 	read -n 1 -s -r -p "*** Persione cualquier tecla para continuar ***"
 	ping -c1 glpi.despegar.it &>/dev/null
@@ -130,9 +163,11 @@ install_18-previous(){
 install_pulse(){	
 	wget --no-check-certificate "https://onedrive.live.com/download?cid=3D090B7E2735BB01&resid=3D090B7E2735BB01%21108&authkey=AKG_w7donFTjcTQ" -O pulse-9.0R4.x86_64.deb 2>&1
 	gdebi -n pulse-9.0R4.x86_64.deb
-	mkdir -p /home/$varusr/.pulse_secure/pulse/
-	echo '{"connName": "VPN Miami", "preferredCert": "", "baseUrl": "https://newton.despegar.net/IT"}' > /home/$varusr/.pulse_secure/pulse/.pulse_Connections.txt
-	chown -R $idusr:$idusr /home/$varusr/.pulse_secure/
+	if [[ $varusr ]]; then
+		mkdir -p /home/$varusr/.pulse_secure/pulse/
+		echo '{"connName": "VPN Miami", "preferredCert": "", "baseUrl": "https://newton.despegar.net/IT"}' > /home/$varusr/.pulse_secure/pulse/.pulse_Connections.txt
+		chown -R $idusr:$idusr /home/$varusr/.pulse_secure/
+    fi
 	checkpulse=$(dpkg -L pulse)
 	if [[ $? -ne 0 ]]; then
 		echo "Pulse Connect NO instalado" >> /home/$varadm/$escri/CheckInstall.txt
@@ -188,9 +223,9 @@ else
 	else
 		CheckInstall
 		NewNameCompu
+		wantcreateuser
 		timedatectl set-timezone "America/Argentina/Buenos_Aires"
 		hwclock --systohc
-		CreateNewUser
 		InstallChrome
 		if [[ $UBUNTU_VER > 18 ]]; then
 			install_19-20

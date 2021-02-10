@@ -60,7 +60,7 @@ else
 	verific
 	install_dependencies
 	install_snx
-	created_by
+	#created_by
 	#############################################################################################
 	cat > $TEMPDIR/aux.sh << 'EOF'
 	DirHost=$(cat DirHost)

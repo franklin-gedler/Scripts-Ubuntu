@@ -40,7 +40,7 @@ install_snx(){
 	echo "server accesoremoto-ar.despegar.net" >> /home/$varusr/.snxrc
 	fundialog=${fundialog=dialog}
 	var1=`$fundialog --stdout --no-cancel --title "    VPN Regional" --inputbox "Ingresar Username VPN: \n Example: Nombre.Apellido " 0 0`
-	#clear
+	clear
 	echo -e "username $var1\nreauth yes" >> /home/$varusr/.snxrc
 	chown $idusr:$idusr /home/$varusr/.snxrc
 }

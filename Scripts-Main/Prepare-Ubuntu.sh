@@ -18,8 +18,8 @@ NewNameCompu(){
 	varnewhostname=AR$varserial
 	/usr/bin/nmcli general hostname $varnewhostname
 	sed -i "s/$varhostname/$varnewhostname/g" /etc/hosts
-	finalname=$(hostname)
-	echo "Nombre del equipo Seteado: $finalname" > /home/$varadm/$escri/CheckInstall.txt
+	#finalname=$(hostname)
+	echo "Nombre del equipo Seteado: $(hostname)" > /home/$varadm/$escri/CheckInstall.txt
 }
 
 CreateNewUser(){
@@ -196,6 +196,125 @@ install_snx(){
 	#chown $idusr:$idusr /home/$varusr/.snxrc
 }
 
+ConnectionAD(){
+
+	ping -c1 10.40.54.1 &>/dev/null
+	while [[ $? -ne 0 ]]; do
+		echo " =========================================================================="
+		echo "       Error al conectarse al Active Directory, por favor verificar!       "
+		echo ""
+		echo "    - Si estas desde casa, conectate a la VPN Regional"
+		echo "    - Si estas en la oficina, abre otra terminal y tira un ping a ar.infra.d  "
+		echo " =========================================================================="
+		echo ""
+        read -n 1 -s -r -p "*** Persione cualquier tecla para continuar ***"
+        echo ""
+        echo ""
+        ping -c1 ar.infra.d &>/dev/null
+	done
+	echo ""
+	echo " ***************************************** "
+	echo "   Conexion con el AD OK, seguimos . . .   "
+	echo " ***************************************** "
+	echo ""
+}
+
+inputcredsoporte(){
+	fundialog=${fundialog=dialog}
+	usrSoporte=`$fundialog --stdout --no-cancel \
+		--backtitle " Credenciales de soporte " \
+		--title "    Usuario de Soporte " \
+		--inputbox "Ingresar Username: \n Example: Nombre.Apellido " 0 0`
+	clear
+
+	fundialog=${fundialog=dialog}
+	passSoporte=`$fundialog --stdout --no-cancel --insecure \
+		--backtitle " Ingrese el Contraseña para $usrSoporte " \
+		--title "    Password" \
+	    --passwordbox " Ingresar contraseña de $usrSoporte " 0 0`
+	clear
+}
+
+validatecredsoporte(){
+
+	ConnectionAD
+	inputcredsoporte
+
+	echo ""
+    echo " ====================================== "
+    echo "   Verificando credenciales ingresadas  "
+    echo " ====================================== "
+    echo ""
+
+	VerifyCheck=$(ldapsearch -z 0 -x -b "dc=ar,dc=infra,dc=d" \
+        -D "$usrSoporte@ar.infra.d" \
+        -h 10.40.54.1 \
+        -w "$passSoporte" "userPrincipalName=$usrSoporte@ar.infra.d" | egrep "sAMAccountName=*" | cut -d' ' -f'2-')
+
+	while [[ -z "$VerifyCheck" ]]; do
+        #echo "El valor de la validacion es $VerifyCheck"
+        echo ""
+		echo " ============================================================================= "
+		echo "           Credenciales Incorrectas, por favor verificar!"
+		echo ""
+		echo "  - Verifica el idioma del teclado (Recordar que el teclado varia de US y ES) "
+		echo "  - Reingresa tus Credenciales de RED"
+		echo "  - Verifica si estas conectado a la RED Despegar"
+		echo " ============================================================================= "
+        inputcredsoporte
+        read -n 1 -s -r -p "*** Persione cualquier tecla para continuar ***"
+		VerifyCheck=$(ldapsearch -z 0 -x -b "dc=ar,dc=infra,dc=d" \
+        	-D "$usrSoporte@ar.infra.d" \
+        	-h 10.40.54.1 \
+        	-w "$passSoporte" "userPrincipalName=$usrSoporte@ar.infra.d" | egrep "sAMAccountName=*" | cut -d' ' -f'2-')
+    done
+    echo ""
+    echo " ***************************************** "
+    echo "   Credenciales de $usrSoporte Correctas   "
+    echo " ***************************************** "
+    echo ""
+}
+
+deletead(){
+
+	validatecredsoporte
+
+	echo ""
+    echo " ======================================================== "
+    echo "   Verificando si el equipo $(hostname) Existe en el AD   "
+    echo " ======================================================== "
+    echo ""
+	
+	ComputerInAD=$(ldapsearch -z 0 -x -b "dc=ar,dc=infra,dc=d" \
+    	-D "$usrSoporte@ar.infra.d" \
+        -h 10.40.54.1 \
+        -w "$passSoporte" "cn=$(hostname)" | egrep "distinguishedName=*" | cut -d' ' -f'2-')
+    
+    if [[ -z "$ComputerInAD" ]];then
+        echo ""
+        echo " ************************************ "
+        echo "   Equipo $(hostname) NO Encontrado   "
+        echo " ************************************ "
+        echo ""
+    else
+        echo ""
+        echo " ================================================================ "
+        echo "   Equipo Encontrado en el AD se procede a Borrar, Espere . . .   "
+        echo "     $ComputerInAD "
+        echo " ================================================================ "
+        echo ""
+        ldapdelete -D "$usrSoporte@ar.infra.d" \
+            -w "$passSoporte" \
+            -h 10.40.54.1 "$ComputerInAD"
+        sleep 5
+		echo ""
+		echo " *********** "
+		echo "   Borrado   "
+		echo " *********** "
+		echo ""
+    fi
+}
+
 ping -c1 google.com &>/dev/null
 if [[ $? -ne 0 ]] || [[ "$EUID" != 0 ]]; then
 	echo " #########################################################"
@@ -212,7 +331,7 @@ else
 	sysctl -w net.ipv6.conf.default.disable_ipv6=1
 	UBUNTU_VER=$(lsb_release -d | grep -o '.[0-9]*\.'| head -1|sed -e 's/\s*//'|sed -e 's/\.//')
 	apt-get update
-	apt-get install -y dialog gdebi-core
+	apt-get install -y dialog gdebi-core ldap-utils
 	if [[ $? != 0 ]]; then
 
 		echo "-------------------------------------------------------"
@@ -223,6 +342,7 @@ else
 	else
 		CheckInstall
 		NewNameCompu
+		deletead
 		wantcreateuser
 		timedatectl set-timezone "America/Argentina/Buenos_Aires"
 		hwclock --systohc

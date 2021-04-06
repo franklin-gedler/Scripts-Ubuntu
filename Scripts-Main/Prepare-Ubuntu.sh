@@ -38,9 +38,9 @@ CreateNewUser(){
 }
 
 wantcreateuser(){
-   dialog --backtitle " Select yes or no " \
-   --title " Question, Please Answer " \
-   --yesno " Do you want to create a user? " 0 0
+   dialog --backtitle " Question, Please Answer " \
+   --title " Seleccione Si o No " \
+   --yesno " ¿Quieres crear un usuario? " 0 0
 
    # Get exit status
    # 0 means user hit [yes] button.

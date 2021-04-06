@@ -296,6 +296,7 @@ deletead(){
         echo "   Equipo $(hostname) NO Encontrado   "
         echo " ************************************ "
         echo ""
+		sleep 10
     else
         echo ""
         echo " ================================================================ "

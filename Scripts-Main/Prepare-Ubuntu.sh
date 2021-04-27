@@ -255,14 +255,14 @@ validatecredsoporte(){
         #echo "El valor de la validacion es $VerifyCheck"
         echo ""
 		echo " ============================================================================= "
-		echo "           Credenciales Incorrectas, por favor verificar!"
+		echo "         Credenciales de $usrSoporte Incorrectas, por favor verificar!"
 		echo ""
 		echo "  - Verifica el idioma del teclado (Recordar que el teclado varia de US y ES) "
 		echo "  - Reingresa tus Credenciales de RED"
 		echo "  - Verifica si estas conectado a la RED Despegar"
 		echo " ============================================================================= "
-        inputcredsoporte
         read -n 1 -s -r -p "*** Persione cualquier tecla para continuar ***"
+		inputcredsoporte
 		VerifyCheck=$(ldapsearch -z 0 -x -b "dc=ar,dc=infra,dc=d" \
         	-D "$usrSoporte@ar.infra.d" \
         	-h 10.40.54.1 \

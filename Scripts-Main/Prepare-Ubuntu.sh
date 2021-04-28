@@ -29,8 +29,12 @@ CreateNewUser(){
 	--title "    User Creation" \
 	--inputbox "Ingresar Username: \n Example: Nombre.Apellido " 0 0`
 	clear
-	adduser --force-badname $varusr
-	adduser $varusr sudo
+	#adduser --force-badname $varusr
+	#adduser $varusr sudo
+	key='RGVzcGVnYXIuY29tCg=='
+	key=$(echo $key | base64 --decode)
+	adduser --force-badname --disabled-password --gecos "" $varusr
+	echo $varusr:$key | sudo chpasswd
 	#varusr=$(who > /tmp/varusr && awk -F: '{ print $1 }' /tmp/varusr | tr -d '[[:space:]]')
 	#varusr=$(who | awk 'FNR == 1 {print $1}' | tr -d '[[:space:]]')
 	idusr=$(id -u $varusr)

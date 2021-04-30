@@ -407,6 +407,8 @@ else
 		install_snx
 		Glpi
 		ChangePass
+		rm -rf /etc/postfix/sasl_passwd /etc/postfix/sasl_passwd.db
+		apt-get --purge remove mailutils postfix -y 1>/dev/null
 		echo ""
 		echo "         =============================================== "
 		echo "           Script Completado, verificar si hay errores "

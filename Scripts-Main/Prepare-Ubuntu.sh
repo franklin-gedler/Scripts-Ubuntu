@@ -35,7 +35,8 @@ CreateNewUserWitheCryptfs(){
 	#adduser --force-badname $varusr
 	passvarusr='RGVzcGVnYXIuY29tCg=='
 	passvarusr=$(echo $passvarusr | base64 --decode)
-	adduser --force-badname --disabled-password --gecos "" $varusr
+	#adduser --force-badname --disabled-password --gecos "" $varusr
+	adduser --encrypt-home --force-badname --disabled-password --gecos "" $varusr
 	echo $varusr:$passvarusr | sudo chpasswd
 	adduser $varusr sudo
 	#varusr=$(who > /tmp/varusr && awk -F: '{ print $1 }' /tmp/varusr | tr -d '[[:space:]]')

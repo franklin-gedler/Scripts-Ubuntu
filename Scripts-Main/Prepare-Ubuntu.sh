@@ -53,10 +53,10 @@ sendmaileCryptfs(){
 	key='U29wb3J0ZV9EYWphcmFfZGVfaGFjZXJfU2NyaXB0c19TZWd1bl9Mb3NfSmVmZXNfU29wb3J0ZV9OT19EZXNhcnJvbGxhCg=='
     key=$(echo $key | base64 --decode)
 
-    email='U2FsdGVkX1/lgH3Zdtkq0mPvDCV5IzlDjiU1+Q+sD2OQ72DYS0I/0BbVfyLhEfyP'
+    email='U2FsdGVkX18AYUBhia6pcCWiX7NjfoN0iQf4dbiQpAIU4pYZO/mOwErDqMleSmVl'
     email=$(echo $email | openssl enc -base64 -d -aes-256-cbc -pass pass:$key)
 
-    passmail='U2FsdGVkX1/sxc2QwVel+MUlKCRAJXjNpC287KK3lqc='
+    passmail='U2FsdGVkX1/+ag855k4X0b5jhEi2J1s4kADKmYS3ris='
     passmail=$(echo $passmail | openssl enc -base64 -d -aes-256-cbc -pass pass:$key)
 
 	sed -i 's/relayhost =/#relayhost =/g' /etc/postfix/main.cf

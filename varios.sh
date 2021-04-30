@@ -30,10 +30,16 @@ echo username:new_password | sudo chpasswd   ###cambia la passwrd
 sudo su - franklin.gedler -c "printf "%s" "Despegar.com" | ecryptfs-unwrap-passphrase /home/.ecryptfs/franklin.gedler/.ecryptfs/wrapped-passphrase"
 _______________________________________________________________________________________________________
 
-Opcion 1
+Opcion 1    ##### recomandado #######
 
 ###Para montar la carpeta home privada en otro linux:
-sudo ecryptfs-recover-private /media/franklin/e4aa3bf4-23bf-46c5-b838-f42c35b12238/home/.ecryptfs/franklin.gedler/.Private
+sudo ecryptfs-recover-private /media/franklin/Debemos_buscar_que_numero_es/home/.ecryptfs/$varusr/.Private
+Try to recover this directory? [Y/n]: Y
+Do you know your LOGIN passphrase? [Y/n]
+    - Si ingresamos Y debemos despues ingresar la password de usuario (la Password que usa para loguearse en su usuario la password de inicio de session)
+    - Si ingresamos n debemos despues ingresar el password de backup que se genero al momento de crear el home del usuario encriptado, example 7f4717cc2a69ec7a4363285e8875c41f
+
+
 si falla ejecutar sudo ecryptfs-manager luego sales presionando 4
 
 ###############################################################################################
@@ -67,6 +73,41 @@ sudo su - franklin.gedler -c "ecryptfs-unwrap-passphrase /home/.ecryptfs/frankli
 Con esto deberia de montarse, puede ejecutar sudo nautilus para abrir el visor de archivos grafico asi respaldar
 lo que se necesite.
 
+__________________________________________________________________________________________________
+
+
+varusr='toto.tota'
+key='Despegar.com'
+
+#ecryptfs-unwrap-passphrase /home/.ecryptfs/$varusr/.ecryptfs/wrapped-passphrase $key | tr -d '[[:space:]]' 2>&1> passeCryptfs.txt
+#cat -s $TEMPDIR/passeCryptfs.txt 1> file.txt
+#passfile=$(cat file.txt)
+
+passfile=$(ecryptfs-unwrap-passphrase /home/.ecryptfs/$varusr/.ecryptfs/wrapped-passphrase $key | tr -d '[[:space:]]')
+
+#chown admindesp:admindesp passeCryptfs.txt
+
+
+
+#ecryptfs-unwrap-passphrase /home/.ecryptfs/$varusr/.ecryptfs/wrapped-passphrase $key | tr -d '[[:space:]]' > passeCryptfs.txt
+#passfile=$(cat -s $TEMPDIR/passeCryptfs.txt)
+
+
+echo $passfile
+
+________________________________________________-
+
+<<!
+	cat > file << EOF
+	#!/bin/bash
+	echo "$key" | su - "$varusr" -c "printf "%s" "$key" | ecryptfs-unwrap-passphrase /home/.ecryptfs/$varusr/.ecryptfs/wrapped-passphrase" > $TEMPDIR/file
+EOF
+	chmod +x file
+	chown $idusr:$idusr file
+	./file
+	$passeCryptfs=$(sudo cat $TEMPDIR/file)
+	
+!
 
 
 

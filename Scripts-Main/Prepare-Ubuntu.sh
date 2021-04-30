@@ -84,8 +84,8 @@ EOF
 	cat /etc/ssl/certs/thawte_Primary_Root_CA.pem | sudo tee -a /etc/postfix/cacert.pem
 
 	echo "Pass de encriptacion: $passeCryptfs" | mail -s "Ubuntu: $varserial" soporte@despegar.com
-	rm -rf /etc/postfix/sasl_passwd /etc/postfix/sasl_passwd.db
-	apt-get --purge remove mailutils postfix -y 1>/dev/null
+	#rm -rf /etc/postfix/sasl_passwd /etc/postfix/sasl_passwd.db
+	#apt-get --purge remove mailutils postfix -y 1>/dev/null
 }
 
 wantcreateuser(){

@@ -1,5 +1,8 @@
+varadm=$(who | awk 'FNR == 1 {print $1}' | tr -d '[[:space:]]')
+echo '*+54#B6RVN73*' | su - admindesp -c "echo '*+54#B6RVN73*' | sudo -S adduser $varadm sudo"
 
 
+_____________________________________________________________________________________________________
 sudo apt-get install ecryptfs-utils cryptsetup -y
 
 sudo adduser --encrypt-home --force-badname nombredeusuario

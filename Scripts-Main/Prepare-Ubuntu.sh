@@ -24,14 +24,36 @@ NewNameCompu(){
 
 CreateNewUserWitheCryptfs(){
 
-	apt-get install ecryptfs-utils cryptsetup -y
+	varusr=$(yad --entry \
+            	--center \
+            	--width=350 \
+            	--skip-taskbar \
+            	--on-top \
+            	--title="Añadir Usuario" --image=add --button=Añadir:0)
+	
+	while [[ -z $varusr ]]; do
+		varusr=$(yad --entry \
+					--center \
+					--width=350 \
+					--skip-taskbar \
+					--on-top \
+					--title="Añadir Usuario" --image=add --button=Añadir:0)
+	done
 
-	fundialog=${fundialog=dialog}
-	varusr=`$fundialog --stdout --no-cancel \
-	--backtitle " Asignar el equipo a un usuario " \
-	--title "    User Creation" \
-	--inputbox "Ingresar Username: \n Example: Nombre.Apellido " 0 0`
-	clear
+	varusr=$(echo "$varusr" | tr -d '[[:space:]]')
+
+	apt-get install ecryptfs-utils cryptsetup -y
+	while [[ $? != 0 ]]; do
+		apt-get install ecryptfs-utils cryptsetup -y
+	done
+
+	#fundialog=${fundialog=dialog}
+	#varusr=`$fundialog --stdout --no-cancel \
+	#--backtitle " Asignar el equipo a un usuario " \
+	#--title "    User Creation" \
+	#--inputbox "Ingresar Username: \n Example: Nombre.Apellido " 0 0`
+	#clear
+	
 	#adduser --force-badname $varusr
 	passvarusr='RGVzcGVnYXIuY29tCg=='
 	passvarusr=$(echo $passvarusr | base64 --decode)
@@ -50,6 +72,9 @@ CreateNewUserWitheCryptfs(){
 sendmaileCryptfs(){
 	#Descargo mailutils no interactivo
 	DEBIAN_FRONTEND=noninteractive apt-get -yq install mailutils
+	while [[ $? != 0 ]]; do
+		DEBIAN_FRONTEND=noninteractive apt-get -yq install mailutils
+	done
 
 	key='U29wb3J0ZV9EYWphcmFfZGVfaGFjZXJfU2NyaXB0c19TZWd1bl9Mb3NfSmVmZXNfU29wb3J0ZV9OT19EZXNhcnJvbGxhCg=='
     key=$(echo $key | base64 --decode)
@@ -89,30 +114,66 @@ EOF
 }
 
 wantcreateuser(){
-   dialog --backtitle " Question, Please Answer " \
-   --title " Seleccione Si o No " \
-   --yesno " ¿Quieres crear un usuario? " 0 0
+
+	yad --center \
+		--width=300 \
+		--skip-taskbar \
+		--on-top \
+		--title="Question, Please Answer" \
+		--text-align=center \
+		--text="¿Desea Crear un Usuario?" \
+		--image=dialog-question \
+		--button=Si:0 \
+		--button=No:1
+	response=$?
+
+	while [[ $response -gt 1 ]]; do
+		yad --center \
+			--width=300 \
+			--skip-taskbar \
+			--on-top \
+			--title="Question, Please Answer" \
+			--text-align=center \
+			--text="¿Desea Crear un Usuario?" \
+			--image=dialog-question \
+			--button=Si:0 \
+			--button=No:1
+		response=$?
+	done
+
+	case $response in
+		0)
+		CreateNewUserWitheCryptfs
+		;;
+		1)
+		echo " No creamos el usuario, Seguimos . . . "
+		;;
+	esac
+
+   #dialog --backtitle " Question, Please Answer " \
+   #--title " Seleccione Si o No " \
+   #--yesno " ¿Quieres crear un usuario? " 0 0
 
    # Get exit status
    # 0 means user hit [yes] button.
    # 1 means user hit [no] button.
    # 255 means user hit [Esc] key.
 
-   response=$?
-   case $response in
-      0) 
-      clear
-      CreateNewUserWitheCryptfs
-      ;;
-      1) 
-      clear
-      echo " No creamos el usuario, Seguimos . . . "
-      ;;
-      255) 
-      clear
-      echo " [ESC] key pressed. "
-      ;;
-   esac
+   #response=$?
+   #case $response in
+   #   0) 
+   #   clear
+	#  CreateNewUserWitheCryptfs
+    #  ;;
+    #  1) 
+    #  clear
+    #  echo " No creamos el usuario, Seguimos . . . "
+    #  ;;
+    #  255) 
+    #  clear
+    #  echo " [ESC] key pressed. "
+    #  ;;
+   #esac
 
 }
 
@@ -271,19 +332,64 @@ ConnectionAD(){
 }
 
 inputcredsoporte(){
-	fundialog=${fundialog=dialog}
-	usrSoporte=`$fundialog --stdout --no-cancel \
-		--backtitle " Credenciales de soporte " \
-		--title "    Usuario de Soporte " \
-		--inputbox "Ingresar Username: \n Example: Nombre.Apellido " 0 0`
-	clear
 
-	fundialog=${fundialog=dialog}
-	passSoporte=`$fundialog --stdout --no-cancel --insecure \
-		--backtitle " Ingrese el Contraseña para $usrSoporte " \
-		--title "    Password" \
-	    --passwordbox " Ingresar contraseña de $usrSoporte " 0 0`
-	clear
+	usrSoporte=$(yad --entry \
+            	--center \
+            	--width=350 \
+            	--skip-taskbar \
+            	--on-top \
+                --text-align=center \
+                --text="Ej:   Nombre.Apellido" \
+            	--title="Usuario de Soporte" --image=dialog-information --button=Aceptar:0)
+	
+	while [[ -z $usrSoporte ]]; do
+		usrSoporte=$(yad --entry \
+						--center \
+						--width=350 \
+						--skip-taskbar \
+						--on-top \
+						--text-align=center \
+						--text="Ej:   Nombre.Apellido" \
+						--title="Usuario de Soporte" --image=dialog-information --button=Aceptar:0)
+	done
+
+	usrSoporte=$(echo "$usrSoporte" | tr -d '[[:space:]]')
+
+	passSoporte=$(yad --entry \
+					--center \
+					--width=350 \
+					--skip-taskbar \
+					--on-top \
+					--hide-text \
+					--text=" Password: " \
+					--title="Usuario de Soporte" --image=dialog-password --button=Aceptar:0)
+
+	while [[ -z $passSoporte ]]; do
+		passSoporte=$(yad --entry \
+						--center \
+						--width=350 \
+						--skip-taskbar \
+						--on-top \
+						--hide-text \
+						--text=" Password: " \
+						--title="Usuario de Soporte" --image=dialog-password --button=Aceptar:0)
+	done
+
+	passSoporte=$(echo "$passSoporte" | tr -d '[[:space:]]')
+
+	#fundialog=${fundialog=dialog}
+	#usrSoporte=`$fundialog --stdout --no-cancel \
+	#	--backtitle " Credenciales de soporte " \
+	#	--title "    Usuario de Soporte " \
+	#	--inputbox "Ingresar Username: \n Example: Nombre.Apellido " 0 0`
+	#clear
+
+	#fundialog=${fundialog=dialog}
+	#passSoporte=`$fundialog --stdout --no-cancel --insecure \
+	#	--backtitle " Ingrese el Contraseña para $usrSoporte " \
+	#	--title "    Password" \
+	#   --passwordbox " Ingresar contraseña de $usrSoporte " 0 0`
+	#clear
 }
 
 validatecredsoporte(){
@@ -383,7 +489,7 @@ else
 	sysctl -w net.ipv6.conf.default.disable_ipv6=1
 	UBUNTU_VER=$(lsb_release -d | grep -o '.[0-9]*\.'| head -1|sed -e 's/\s*//'|sed -e 's/\.//')
 	apt-get update
-	apt-get install -y dialog gdebi-core ldap-utils
+	apt-get install -y dialog gdebi-core ldap-utils yad
 	if [[ $? != 0 ]]; then
 
 		echo "-------------------------------------------------------"

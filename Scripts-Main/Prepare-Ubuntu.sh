@@ -333,6 +333,13 @@ ConnectionAD(){
 
 inputcredsoporte(){
 
+	echo ""
+    echo " ======================================= "
+    echo "   Ingresa tus credenciales de soporte   "
+	echo "     para buscar el equipo en el AD      "
+    echo " ======================================= "
+    echo ""
+
 	usrSoporte=$(yad --entry \
             	--center \
             	--width=350 \
@@ -500,9 +507,12 @@ Updatebios(){
 
 RebootNow(){
 	echo ""
-	echo " ################################# "
-	echo "      Es Necesario Reiniciar       "
-	echo " ################################# "
+	echo ""
+	echo ""
+	echo " ####################################### "
+	echo "         Es Necesario Reiniciar          "
+	echo "   Recuerde NO Desconectar el Cargador   "
+	echo " ####################################### "
 	#read -n 1 -s -r -p "*** Persione cualquier tecla para continuar ***"
 	read -t 60 -n 1 -s -r -p "*** Persione cualquier tecla para continuar ***"
 	reboot -f

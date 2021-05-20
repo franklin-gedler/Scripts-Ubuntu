@@ -473,6 +473,41 @@ deletead(){
     fi
 }
 
+VerifyAC(){
+
+	sudo apt-get install acpi
+
+	ACPower=$(acpi -a | awk '{print $3}' | tr -d '[[:space:]]')
+
+	while [[ $ACPower = "off-line" ]];do
+			echo ""
+			echo " ********************************** "
+			echo "   Por favor Conectar el Cargador   "
+			echo " ********************************** "
+			echo ""
+			read -n 1 -s -r -p "*** Persione cualquier tecla para continuar ***"
+			ACPower=$(acpi -a | awk '{print $3}' | tr -d '[[:space:]]')
+	done
+}
+
+Updatebios(){
+
+	VerifyAC
+	service fwupd start
+	fwupdmgr refresh
+	echo -e "\nN" | fwupdmgr --assume-yes --force update
+}
+
+RebootNow(){
+	echo ""
+	echo " ################################# "
+	echo "      Es Necesario Reiniciar       "
+	echo " ################################# "
+	#read -n 1 -s -r -p "*** Persione cualquier tecla para continuar ***"
+	read -t 60 -n 1 -s -r -p "*** Persione cualquier tecla para continuar ***"
+	reboot -f
+}
+
 ping -c1 google.com &>/dev/null
 if [[ $? -ne 0 ]] || [[ "$EUID" != 0 ]]; then
 	echo " #########################################################"
@@ -485,6 +520,7 @@ else
 	cd $TEMPDIR
 	echo "$DirHost" > DirHost
 	############################################################################################
+
 	sysctl -w net.ipv6.conf.all.disable_ipv6=1
 	sysctl -w net.ipv6.conf.default.disable_ipv6=1
 	UBUNTU_VER=$(lsb_release -d | grep -o '.[0-9]*\.'| head -1|sed -e 's/\s*//'|sed -e 's/\.//')
@@ -498,6 +534,7 @@ else
 		exit
 
 	else
+		VerifyAC
 		CheckInstall
 		NewNameCompu
 		deletead
@@ -505,7 +542,7 @@ else
 		timedatectl set-timezone "America/Argentina/Buenos_Aires"
 		hwclock --systohc
 		InstallChrome
-		if [[ $UBUNTU_VER > 18 ]]; then
+		if [[ $UBUNTU_VER -gt 18 ]]; then
 			install_19-20
 		else
 			install_18-previous
@@ -513,12 +550,10 @@ else
 		install_snx
 		Glpi
 		ChangePass
+		Updatebios
 		rm -rf /etc/postfix/sasl_passwd /etc/postfix/sasl_passwd.db
 		apt-get --purge remove mailutils postfix -y 1>/dev/null
-		echo ""
-		echo "         =============================================== "
-		echo "           Script Completado, verificar si hay errores "
-		echo "         =============================================== "
+	
 	fi
 	#############################################################################################
 	cat > $TEMPDIR/aux.sh << 'EOF'
@@ -528,13 +563,7 @@ else
 EOF
 	chmod +x aux.sh
 	./aux.sh
+	RebootNow
 	exit
-	# Mje al usuario
-	#dialog --title "README" --msgbox "Listo . . \n Para completar la preparacion es necesario \n reiniciar el equipo"." \n   Created by Franklin Gedler Support Team" 0 0
-	#clear
-	#echo " ################################# "
-	#echo "      Es Necesario Reiniciar       "
-	#echo " ################################# "
-	#read -n 1 -s -r -p "*** Persione cualquier tecla para continuar ***"
-	#reboot	
+	
 fi

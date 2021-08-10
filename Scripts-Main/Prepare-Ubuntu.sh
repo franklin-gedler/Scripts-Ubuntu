@@ -563,7 +563,6 @@ else
 		CheckInstall
 		NewNameCompu
 		deletead
-		Teamviewer
 		wantcreateuser
 		timedatectl set-timezone "America/Argentina/Buenos_Aires"
 		hwclock --systohc
@@ -574,6 +573,7 @@ else
 			install_18-previous
 		fi
 		install_snx
+		Teamviewer
 		Glpi
 		ChangePass
 		Updatebios

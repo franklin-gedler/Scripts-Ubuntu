@@ -290,7 +290,8 @@ install_pulse(){
 
 install_snx(){
 	dpkg --add-architecture i386
-	apt-get install -y libpam0g:i386 libstdc++5 libx11-6:i386 libstdc++6:i386 libstdc++5:i386
+	#apt-get install -y libpam0g:i386 libstdc++5 libx11-6:i386 libstdc++6:i386 libstdc++5:i386
+	apt install libpam0g:i386 libx11-6:i386 libstdc++6:i386 libstdc++5:i386 libnss3-tools -y
 	wget https://starkers.keybase.pub/snx_install_linux30.sh?dl=1 -O snx_install.sh
 	chmod +x snx_install.sh
 	./snx_install.sh
@@ -505,6 +506,18 @@ Updatebios(){
 	echo -e "\nN" | fwupdmgr --assume-yes --force update
 }
 
+Teamviewer(){
+	curl -LO# https://download.teamviewer.com/download/linux/signature/TeamViewer2017.asc
+
+	apt-key add TeamViewer2017.asc
+	
+	add-apt-repository 'deb https://linux.teamviewer.com/deb stable main'
+
+	apt-get install teamviewer -y
+
+	teamviewer license accept
+}
+
 RebootNow(){
 	echo ""
 	echo ""
@@ -517,6 +530,8 @@ RebootNow(){
 	read -t 60 -n 1 -s -r -p "*** Persione cualquier tecla para continuar ***"
 	reboot -f
 }
+
+
 
 ping -c1 google.com &>/dev/null
 if [[ $? -ne 0 ]] || [[ "$EUID" != 0 ]]; then
@@ -548,6 +563,7 @@ else
 		CheckInstall
 		NewNameCompu
 		deletead
+		Teamviewer
 		wantcreateuser
 		timedatectl set-timezone "America/Argentina/Buenos_Aires"
 		hwclock --systohc

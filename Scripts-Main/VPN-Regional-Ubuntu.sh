@@ -29,7 +29,8 @@ verific(){
 install_dependencies(){
 	dpkg --add-architecture i386
 	apt-get update
-	apt-get install -y dialog libpam0g:i386 libstdc++5 libx11-6:i386 libstdc++6:i386 libstdc++5:i386
+	#apt-get install -y dialog libpam0g:i386 libstdc++5 libx11-6:i386 libstdc++6:i386 libstdc++5:i386
+	apt install libpam0g:i386 libx11-6:i386 libstdc++6:i386 libstdc++5:i386 libnss3-tools dialog -y
 }
 
 install_snx(){

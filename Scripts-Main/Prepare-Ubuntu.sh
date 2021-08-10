@@ -478,6 +478,7 @@ deletead(){
 		echo "   Borrado   "
 		echo " *********** "
 		echo ""
+		sleep 5
     fi
 }
 

@@ -256,37 +256,40 @@ Glpi(){
 	sleep 20
 }
 
-install_19-20(){
-	apt-get install -y libgtk2.0-0
-	wget http://archive.ubuntu.com/ubuntu/pool/main/i/icu/libicu60_60.2-3ubuntu3_amd64.deb
-	wget http://archive.ubuntu.com/ubuntu/pool/universe/w/webkitgtk/libjavascriptcoregtk-1.0-0_2.4.11-3ubuntu3_amd64.deb
-	wget http://archive.ubuntu.com/ubuntu/pool/universe/w/webkitgtk/libwebkitgtk-1.0-0_2.4.11-3ubuntu3_amd64.deb
-	gdebi -n libicu60_60.2-3ubuntu3_amd64.deb
-	gdebi -n libjavascriptcoregtk-1.0-0_2.4.11-3ubuntu3_amd64.deb
-	gdebi -n libwebkitgtk-1.0-0_2.4.11-3ubuntu3_amd64.deb
-	install_pulse
-}
+#____________________________     Para Borrar Posiblemente ______________________________________
+	install_19-20(){
+		apt-get install -y libgtk2.0-0
+		wget http://archive.ubuntu.com/ubuntu/pool/main/i/icu/libicu60_60.2-3ubuntu3_amd64.deb
+		wget http://archive.ubuntu.com/ubuntu/pool/universe/w/webkitgtk/libjavascriptcoregtk-1.0-0_2.4.11-3ubuntu3_amd64.deb
+		wget http://archive.ubuntu.com/ubuntu/pool/universe/w/webkitgtk/libwebkitgtk-1.0-0_2.4.11-3ubuntu3_amd64.deb
+		gdebi -n libicu60_60.2-3ubuntu3_amd64.deb
+		gdebi -n libjavascriptcoregtk-1.0-0_2.4.11-3ubuntu3_amd64.deb
+		gdebi -n libwebkitgtk-1.0-0_2.4.11-3ubuntu3_amd64.deb
+		install_pulse
+	}
 
-install_18-previous(){
-	apt-get install -y libwebkitgtk-1.0-0 libproxy1-plugin-webkit libgnome-keyring0
-	install_pulse
-}
+	install_18-previous(){
+		apt-get install -y libwebkitgtk-1.0-0 libproxy1-plugin-webkit libgnome-keyring0
+		install_pulse
+	}
+#_________________________________________________________________________________________________
 
 install_pulse(){	
-	wget --no-check-certificate "https://onedrive.live.com/download?cid=3D090B7E2735BB01&resid=3D090B7E2735BB01%21108&authkey=AKG_w7donFTjcTQ" -O pulse-9.0R4.x86_64.deb 2>&1
-	gdebi -n pulse-9.0R4.x86_64.deb
+	#wget --no-check-certificate "https://onedrive.live.com/download?cid=3D090B7E2735BB01&resid=3D090B7E2735BB01%21108&authkey=AKG_w7donFTjcTQ" -O pulse-9.0R4.x86_64.deb 2>&1
+	#gdebi -n pulse-9.0R4.x86_64.deb
 
-	#GITHUB_API_TOKEN="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"
-	#GH_ASSET="https://api.github.com/repos/franklin-gedler/Scripts-Ubuntu/releases/assets/43371663"
-	#curl -LJO# -H "Authorization: token $GITHUB_API_TOKEN" -H "Accept: application/octet-stream" "$GH_ASSET"
+	GITHUB_API_TOKEN="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"
+	GH_ASSET="https://api.github.com/repos/franklin-gedler/Scripts-Ubuntu/releases/assets/43371663"
+	curl -LJO# -H "Authorization: token $GITHUB_API_TOKEN" -H "Accept: application/octet-stream" "$GH_ASSET"
 
-	#gdebi -n Pulse-9.1r11.0-64bit.deb
+	gdebi -n Pulse-9.1r11.0-64bit.deb
 
-	if [[ $varusr ]]; then
-		mkdir -p /home/$varusr/.pulse_secure/pulse/
-		echo '{"connName": "VPN Miami", "preferredCert": "", "baseUrl": "https://newton.despegar.net/IT"}' > /home/$varusr/.pulse_secure/pulse/.pulse_Connections.txt
-		chown -R $idusr:$idusr /home/$varusr/.pulse_secure/
-    fi
+	#if [[ $varusr ]]; then
+	#	mkdir -p /home/$varusr/.pulse_secure/pulse/
+	#	echo '{"connName": "VPN Miami", "preferredCert": "", "baseUrl": "https://newton.despegar.net/IT"}' > /home/$varusr/.pulse_secure/pulse/.pulse_Connections.txt
+	#	chown -R $idusr:$idusr /home/$varusr/.pulse_secure/
+    #fi
+
 	checkpulse=$(dpkg -L pulse)
 	if [[ $? -ne 0 ]]; then
 		echo "Pulse Connect NO instalado" >> /home/$varadm/$escri/CheckInstall.txt
@@ -581,11 +584,14 @@ else
 		timedatectl set-timezone "America/Argentina/Buenos_Aires"
 		hwclock --systohc
 		InstallChrome
-		if [[ $UBUNTU_VER -gt 18 ]]; then
-			install_19-20
-		else
-			install_18-previous
-		fi
+		# __________________Para Borrar Posiblemente _________________________
+			#if [[ $UBUNTU_VER -gt 18 ]]; then
+			#	install_19-20
+			#else
+			#	install_18-previous
+			#fi
+		#_____________________________________________________________________
+		install_pulse
 		install_snx
 		Teamviewer
 		Glpi

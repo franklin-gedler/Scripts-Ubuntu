@@ -35,9 +35,17 @@ install_dependencies(){
 
 install_snx(){
 
-	wget https://starkers.keybase.pub/snx_install_linux30.sh?dl=1 -O snx_install.sh
-	chmod +x snx_install.sh
-	./snx_install.sh
+	#wget https://starkers.keybase.pub/snx_install_linux30.sh?dl=1 -O snx_install.sh
+	#chmod +x snx_install.sh
+	#./snx_install.sh
+	
+	GITHUB_API_TOKEN="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"
+	GH_ASSET="https://api.github.com/repos/franklin-gedler/Scripts-Ubuntu/releases/assets/43369399"
+	curl -LJO# -H "Authorization: token $GITHUB_API_TOKEN" -H "Accept: application/octet-stream" "$GH_ASSET"
+
+	chmod +x snx_install_linux30.sh
+	./snx_install_linux30.sh
+	
 	echo "server accesoremoto-ar.despegar.net" >> /home/$varusr/.snxrc
 	fundialog=${fundialog=dialog}
 	var1=`$fundialog --stdout --no-cancel --title "    VPN Regional" --inputbox "Ingresar Username VPN: \n Example: Nombre.Apellido " 0 0`
@@ -61,7 +69,6 @@ else
 	verific
 	install_dependencies
 	install_snx
-	#created_by
 	#############################################################################################
 	cat > $TEMPDIR/aux.sh << 'EOF'
 	DirHost=$(cat DirHost)

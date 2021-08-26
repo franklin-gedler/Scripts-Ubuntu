@@ -273,8 +273,15 @@ install_18-previous(){
 }
 
 install_pulse(){	
-	wget --no-check-certificate "https://onedrive.live.com/download?cid=3D090B7E2735BB01&resid=3D090B7E2735BB01%21108&authkey=AKG_w7donFTjcTQ" -O pulse-9.0R4.x86_64.deb 2>&1
-	gdebi -n pulse-9.0R4.x86_64.deb
+	#wget --no-check-certificate "https://onedrive.live.com/download?cid=3D090B7E2735BB01&resid=3D090B7E2735BB01%21108&authkey=AKG_w7donFTjcTQ" -O pulse-9.0R4.x86_64.deb 2>&1
+	#gdebi -n pulse-9.0R4.x86_64.deb
+
+	GITHUB_API_TOKEN="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"
+	GH_ASSET="https://api.github.com/repos/franklin-gedler/Scripts-Ubuntu/releases/assets/43371663"
+	curl -LJO# -H "Authorization: token $GITHUB_API_TOKEN" -H "Accept: application/octet-stream" "$GH_ASSET"
+
+	gdebi -n Pulse-9.1r11.0-64bit.deb
+
 	if [[ $varusr ]]; then
 		mkdir -p /home/$varusr/.pulse_secure/pulse/
 		echo '{"connName": "VPN Miami", "preferredCert": "", "baseUrl": "https://newton.despegar.net/IT"}' > /home/$varusr/.pulse_secure/pulse/.pulse_Connections.txt
@@ -292,9 +299,15 @@ install_snx(){
 	dpkg --add-architecture i386
 	#apt-get install -y libpam0g:i386 libstdc++5 libx11-6:i386 libstdc++6:i386 libstdc++5:i386
 	apt install libpam0g:i386 libx11-6:i386 libstdc++6:i386 libstdc++5:i386 libnss3-tools -y
-	wget https://starkers.keybase.pub/snx_install_linux30.sh?dl=1 -O snx_install.sh
-	chmod +x snx_install.sh
-	./snx_install.sh
+	#wget https://starkers.keybase.pub/snx_install_linux30.sh?dl=1 -O snx_install.sh
+
+	GITHUB_API_TOKEN="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"
+	GH_ASSET="https://api.github.com/repos/franklin-gedler/Scripts-Ubuntu/releases/assets/43369399"
+	curl -LJO# -H "Authorization: token $GITHUB_API_TOKEN" -H "Accept: application/octet-stream" "$GH_ASSET"
+
+	chmod +x snx_install_linux30.sh
+	./snx_install_linux30.sh
+
 	if [[ $? -ne 0 ]]; then
 		echo "CheckPoint NO instalado" >> /home/$varadm/$escri/CheckInstall.txt
 	else

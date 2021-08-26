@@ -50,7 +50,10 @@ install_pulse(){
 	curl -LJO# -H "Authorization: token $GITHUB_API_TOKEN" -H "Accept: application/octet-stream" "$GH_ASSET"
 
 	gdebi -n Pulse-9.1r11.0-64bit.deb
-	
+
+	# Config
+		#/var/lib/pulsesecure/pulse   Fiajte que en mac lograste inyectarle el portal
+
 	#mkdir -p /home/$varusr/.pulse_secure/pulse/
 	#echo '{"connName": "VPN Miami", "preferredCert": "", "baseUrl": "https://newton.despegar.net/IT"}' > /home/$varusr/.pulse_secure/pulse/.pulse_Connections.txt
 	#chown -R $idusr:$idusr /home/$varusr/.pulse_secure/

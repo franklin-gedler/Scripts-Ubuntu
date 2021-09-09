@@ -533,6 +533,10 @@ Teamviewer(){
 	apt-get install teamviewer -y
 
 	teamviewer license accept
+
+	# Lo elimino ya que el instalador del team crea en source.list.d 
+	# otro repo de teamviewer lo cual duplica el repo y tira error
+	add-apt-repository --remove 'deb https://linux.teamviewer.com/deb stable main'  
 }
 
 RebootNow(){

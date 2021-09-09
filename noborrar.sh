@@ -1,10 +1,10 @@
 #!/bin/bash
 
     # Variables que puedes tocar
-    name="Pulse-9.1r11.0-64bit.deb"
-    GITHUB_API_TOKEN="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"
+    name="PulseSecure-9_1R12.pkg"
+    GITHUB_API_TOKEN="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"
     owner="franklin-gedler"
-    repo="Scripts-Ubuntu"
+    repo="Scripts-MacOS"
     tag="1"
 
     # Variables que no se tocan
@@ -23,6 +23,8 @@
     # Download asset file.
     #echo "Downloading asset..." >&2
     #curl $CURL_ARGS -H 'Accept: application/octet-stream' "$GH_ASSET?access_token=$GITHUB_API_TOKEN"
-	curl $CURL_ARGS -H "Authorization: token $GITHUB_API_TOKEN" -H "Accept: application/octet-stream" "$GH_ASSET"
+	
+    #curl $CURL_ARGS -H "Authorization: token $GITHUB_API_TOKEN" -H "Accept: application/octet-stream" "$GH_ASSET"
+    
     #echo "$0 done." >&2
 

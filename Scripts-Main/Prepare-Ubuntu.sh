@@ -547,21 +547,6 @@ Teamviewer(){
 		add-apt-repository --remove 'deb https://linux.teamviewer.com/deb stable main'  
 }
 
-RebootNow(){
-	echo ""
-	echo ""
-	echo ""
-	echo " ####################################### "
-	echo "         Es Necesario Reiniciar          "
-	echo "   Recuerde NO Desconectar el Cargador   "
-	echo " ####################################### "
-	#read -n 1 -s -r -p "*** Persione cualquier tecla para continuar ***"
-	read -t 60 -n 1 -s -r -p "*** Persione cualquier tecla para continuar ***"
-	reboot -f
-}
-
-
-
 ping -c1 google.com &>/dev/null
 if [[ $? -ne 0 ]] || [[ "$EUID" != 0 ]]; then
 	echo " #########################################################"
@@ -621,7 +606,7 @@ else
 EOF
 	chmod +x aux.sh
 	./aux.sh
-	RebootNow
+	#RebootNow # este rebooot lo tiene el Preprare NAS
 	exit
 	
 fi

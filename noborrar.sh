@@ -1,11 +1,11 @@
 #!/bin/bash
 
     # Variables que puedes tocar
-    name="PulseSecure-9_1R12.pkg"
-    GITHUB_API_TOKEN="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"
+    name="Dell-Command-Update-Application-for-Windows-10_GRVPK_WIN_4.3.0_A00_03.EXE"
+    GITHUB_API_TOKEN="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"
     owner="franklin-gedler"
-    repo="Scripts-MacOS"
-    tag="1"
+    repo="Scripts-Win10"
+    tag="2"
 
     # Variables que no se tocan
     GH_API="https://api.github.com"

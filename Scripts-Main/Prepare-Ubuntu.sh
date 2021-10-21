@@ -562,7 +562,7 @@ else
 
 	sysctl -w net.ipv6.conf.all.disable_ipv6=1
 	sysctl -w net.ipv6.conf.default.disable_ipv6=1
-	UBUNTU_VER=$(lsb_release -d | grep -o '.[0-9]*\.'| head -1|sed -e 's/\s*//'|sed -e 's/\.//')
+	#UBUNTU_VER=$(lsb_release -d | grep -o '.[0-9]*\.'| head -1|sed -e 's/\s*//'|sed -e 's/\.//')
 	apt-get update
 	apt-get install -y dialog gdebi-core ldap-utils yad
 	if [[ $? != 0 ]]; then

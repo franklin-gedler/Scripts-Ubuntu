@@ -1,0 +1,4 @@
+dn: cn=dbagrp,ou=groups,dc=tgs,dc=com
+changetype: modify
+add: memberuid
+memberuid: adam

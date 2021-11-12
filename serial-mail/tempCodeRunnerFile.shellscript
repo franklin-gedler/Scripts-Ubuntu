@@ -1,0 +1,12 @@
+#!/bin/bash
+
+var1=''
+
+var1 <<EOF
+dn: cn=dbagrp,ou=groups,dc=tgs,dc=com
+changetype: modify
+add: memberuid
+memberuid: adam
+EOF
+
+echo "$var1"

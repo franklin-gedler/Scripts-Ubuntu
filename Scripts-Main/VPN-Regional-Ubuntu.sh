@@ -1,6 +1,6 @@
 #!/bin/bash
 #VPNRegionalUbuntu
-
+# esto es una prueba
 created_by(){
 	# Mje para el Usuario
 	dialog --title "README" --msgbox "Listo . . \n Con solo ejecutar snx desde el terminal \n te pedira que ingreses el passcode generado \n con la app RSA"." \n   Created by Franklin Gedler Support Team" 0 0

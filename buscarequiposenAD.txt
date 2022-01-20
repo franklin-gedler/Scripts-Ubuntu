@@ -1,1 +1,0 @@
-ldapsearch -E pr=1000/noprompt -LLL -o ldif-wrap=no -x -z 0 -b "OU=Computadoras,dc=ar,dc=infra,dc=d" -D "ldapread@ar.infra.d" -h 10.40.54.1 -w "readldap" "cn=ARSERIAL11"

@@ -10,7 +10,6 @@ error() {
 }
 echo
 echo "                Script Creado por Franklin Gedler"
-echo "                        Soporte Argentina        "
 echo
 
 ping -c1 google.com &>/dev/null
@@ -43,7 +42,7 @@ else
 
     echo " ______________________________________________________________________________________ "
     echo
-    echo -n "  Ingrese la Password Backup de Soporte:  "   #### Escribe el ingreso de teclado despues de los (:) dos puntos
+    echo -n "  Ingrese la Password Backup de Soporte:  "   #### Esta Password es la generada al momento de encriptar el home del usuario
     stty_orig=$(stty -g)
     passphrase=$(head -n1 | tr -d '[[:space:]]')
     stty $stty_orig
